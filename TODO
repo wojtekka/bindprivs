@@ -1,0 +1,13 @@
+bpset.c:
+- endian-correct masks,
+- name resolving.
+
+bindprivs.c:
+- tests, tests, tests.
+
+bindprivs.conf.sample:
+- write them.
+
+[Tygrys_(tygrys@tangerine.dream.art.pl)] tak wiêc przed schedule() daj
+          current->policy |= SCHED_YIELD;
+	 
