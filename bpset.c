@@ -1,6 +1,6 @@
 /*
  * bindprivs access list manager
- * (c) 1998-2002 wojtek kaniewski <wojtekka@dev.null.pl>
+ * (c) 1999-2002 wojtek kaniewski <wojtekka@dev.null.pl>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as

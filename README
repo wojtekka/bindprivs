@@ -1,6 +1,6 @@
 
-    bindprivs 0.6-beta3
-    (c) 1998-2002 by wojtek kaniewski
+    bindprivs 0.6
+    (c) 1999-2002 by wojtek kaniewski
     licensed under terms of GPL v2
     
 intro:
@@ -24,6 +24,9 @@ compilation:
     if you get lots of errors about conflicting types, add ,,#define
     _LOOSE_KERNEL_NAMES'' at top of bindprivs.c
 
+cvs:
+    cvs -d:pserver:anonymous@dev.null.pl:/home/cvs co bindprivs
+
 contact:
     DON'T contact me if you haven't read these docs or your system is
     broken. if you don't know how to deal with this package, you probably
@@ -36,6 +39,9 @@ betatesters:
     - SoboL <sobol@sobol.org>.
 
 changelog:
+    - 0.6 (2003-06-12)
+        + no complaints,
+	+ files put into CVS.
     - 0.6-beta3 (2002-11-25)
         + removed no longer needed cleanup_module() code,
     - 0.6-beta2 (2002-11-23)
