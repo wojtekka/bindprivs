@@ -1,0 +1,76 @@
+/* 
+ * bindprivs v0.01 -- instrukcja obs³ugi
+ * (c) copyright 1999 by wojtek kaniewski <wojtekka@irc.pl>
+ */
+
+jest to prosty modulik dla kerneli 2.2.x, który pozwala ograniczaæ dostêp do
+danych interfejsów (i aliasów IP) poszczególnym u¿ytkownikom. jego dzia³anie
+polega na przejêciu funkcji systemowej bind().
+
+niestety ze wzglêdu na prostotê modu³u, wszystkie ustawienia s± wkompilowane
+na sta³e i nie mo¿na ich zmieniaæ podczas dzia³ania. ustawienia s± zapisane w
+pliku `bindprivs.conf'. ka¿da linia zaczynaj±ca siê od `#' jest komentarzem i
+zostanie zignorowana. pierwszy wyraz okre¶la komendê i informuje, jaka akcja
+ma byæ podjêta, gdy podane informacje bêd± pasowa³y do sytuacji. mog± to byæ:
+
+  `allow', `allowusers' - pozwalaj± na u¿ycie adresów danym u¿ytkownikom,
+  `allowgroups' - pozwalaj± u¿yæ adresów grupom u¿ytkowników,
+  `deny', `denyusers' - zabraniaj± u¿ycia u¿ytkownikom,
+  `denygroups' - zabraniaj± u¿ycia adresów grupom u¿ytkowników.
+  
+pierwszy argument komendy okre¶la adres IP, lub klasê adresow±. dozwolone
+notacje to:
+
+  `adres.ip', np. `195.117.64.14'
+  `adres.ip/zwykla.netmaska', np. `195.116.30.0/255.255.255.0'
+  `adres.ip/ilo¶æ.bitów', np. `212.24.178.0/24'
+  `any', oznacza dowolny adres IP
+  
+drugi argument, w zale¿no¶ci od komendy, zawiera listê u¿ytkowników lub grup
+u¿ytkowników, których dotyczy dana akcja. elementy listy rodziela siê
+spacjami. gdy akcja ma dotyczyæ wszystkich u¿ytkowników, mo¿na u¿yæ s³owa
+`any' lub `all'. przyk³adowe wpisy to:
+
+  allow any any
+  
+zezwala wszystkim u¿ytkownikom u¿ywaæ wszystkich adresów. jest to domy¶lna
+regu³a programu przy braku jakichkolwiek wpisów.
+
+  deny 194.204.139.0/24 any
+  
+zabrania wszystkim u¿ytkownikom korzystania z klasy C `194.204.139.0' -
+przydatne gdy dana klasa zawiera wirtualne serwery www, a nie chcemy, ¿eby
+u¿ytkownicy wychodzili w ¶wiat z adresami typu `www.nasz-klient.com.pl'.
+
+  allow 194.204.139.0/24 root
+  deny 194.204.139.0/24 any
+
+powy¿sze dwie linie dzia³aj± podobnie jak poprzedni przyk³ad, lecz pozwalaj±
+rootowi na bind()owanie podanych.
+
+  allowgroup 134.35.101.2 friends
+  allow 134.35.101.2 root jerry buzz mike
+  deny 134.35.101.2 any
+
+pozwala u¿ywaæ adresu `134.35.101.2' grupie `friends', administratorowi oraz
+u¿ytkownikom `jerry', `buzz' i `mike'.
+
+po zmianie pliku konfiguracyjnego nale¿y wywo³aæ polecenie `make build', które
+skompiluje modu³. gdy wszystko przebiegnie pomy¶lnie, zostanie utworzony modu³
+`bindprivs.o', gotowy do za³adowania poleceniem `insmod bindprivs.o' lub `make
+load'.
+
+gdy chcemy zmieniæ parametry modu³u, po edycji pliku `bindprivs.conf' mo¿na
+wywo³aæ polecenie `make rebuild', które po kompilacji modu³u, usunie z pamiêci
+star± wersjê i za³aduje now±.
+
+je¶li kiedykolwiek uka¿e siê nowa lub poprawiona wersja programu, bêdzie siê
+ona znajdowaæ pod adresami:
+
+  http://wojtekka.stone.pl/software/
+  ftp://amba.bydg.pdi.net/pub/people/wojtekka/
+
+chcia³bym tylko jeszcze podziêkowaæ lcamtufowi, za to, ¿e jego modu³y s±
+¶wietnymi przyk³adami (szczególnie afhrm i sockpriv), kod¿akowi, za jego
+dzie³a, które sta³y siê inspiracj± do napisania `bindprivs' i Mitchowi, za
+nieumy¶lne podsuniêcie pomys³u ;)
