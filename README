@@ -1,7 +1,16 @@
 /* 
- * bindprivs v0.02 -- instrukcja obs³ugi
- * (c) copyright 1999 by wojtek kaniewski <wojtekka@irc.pl>
+ * bindprivs v0.02b -- instrukcja obs³ugi
+ * (c) copyright 1999, 2001 by wojtek kaniewski <wojtekka@irc.pl>
  */
+
+.--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--.
+| wersja 0.02b nie by³a zbyt mocno testowana. z pobie¿nych obserwacji    |
+| wynika, ¿e dzia³a prawid³owo na kernelach z SMP itd, itd. jak zawsze,  |
+| u¿ywasz na w³asne ryzyko. skrypt `build-config' powinien na podstawie  |
+| `uname -r' wykryæ j±dro SMP i skompilowaæ odpowiedni± wersjê modu³u.   |
+| reszta pliku, zw³aszcza o wersji 2.0 jest nieaktualna. nie chce mi siê |
+| szukaæ kogo¶, kto to przetestuje. to tylko `hotfix' ;)                 |
+`--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--UWAGA--'
 
 jest to prosty modulik dla kerneli rodzin 2.0 i 2.2, który pozwala ograniczaæ
 dostêp do danych interfejsów (i aliasów IP) poszczególnym u¿ytkownikom. jego

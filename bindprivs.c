@@ -1,6 +1,6 @@
 /*
- * bindprivs v0.02
- * (c) copyright 1999 by wojtek kaniewski <wojtekka@irc.pl>
+ * bindprivs v0.02b
+ * (c) copyright 1999, 2001 by wojtek kaniewski <wojtekka@irc.pl>
  */
 
 #define MODULE
@@ -9,6 +9,9 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/types.h>
+#if CONFIG_MODVERSIONS
+#include <linux/modversions.h>
+#endif
 //#include <linux/string.h>
 #include <linux/socket.h>
 #include <linux/net.h>
@@ -66,29 +69,51 @@ int new_socketcall(int call, unsigned long *args)
 {
   unsigned long a[3];
   char sa[256];
-  
-  if (copy_from_user(a, args, 3 * sizeof(unsigned long)))
-    return -EFAULT;
+  int res;
+
+  lock_kernel();
     
+  if (copy_from_user(a, args, 3 * sizeof(unsigned long))) {
+    res = -EFAULT;
+    goto exit;
+  }    
   if (call == SYS_BIND) {
-    if (copy_from_user(sa, (void*) a[1], (a[2] > 256) ? 256 : a[2]))
-      return -EFAULT;
-    if (check_bind((struct sockaddr*) &sa, a[2]))
-      return -EPERM;
+    if (copy_from_user(sa, (void*) a[1], (a[2] > 256) ? 256 : a[2])) {
+      res = -EFAULT;
+      goto exit;
+    }
+    if (check_bind((struct sockaddr*) &sa, a[2])) {
+      res = -EPERM;
+      goto exit;
+    }
   }
+  res = old_socketcall(call, args);
+exit:
+  unlock_kernel();
   
-  return old_socketcall(call, args);
+  return res;
 }
 
 int init_module()
 {
-  printk("bindprivs for " KERNEL_DESC" loaded, %d entries\n", ENTRIES);
+  unsigned long flags;
+
+  save_flags(flags);
+  cli();
   old_socketcall = sys_call_table[__NR_socketcall];
   sys_call_table[__NR_socketcall] = new_socketcall;
+  restore_flags(flags);
+  printk("bindprivs for " KERNEL_DESC" loaded, %d entries\n", ENTRIES);
+
   return 0;
 }
 
 void cleanup_module()
 {
+  unsigned long flags;
+
+  save_flags(flags);
+  cli();
   sys_call_table[__NR_socketcall] = old_socketcall;
+  restore_flags(flags);
 }

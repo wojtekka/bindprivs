@@ -1,3 +1,5 @@
+v0.02b, 2001-03-26
+ - save_flags(), lock_kernel(),
 
 v0.02, 1999-11-18
  - kosmetyczne zmiany (g³ównie podziêkowania i pozdrowienia),

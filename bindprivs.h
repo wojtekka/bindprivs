@@ -1,6 +1,6 @@
 /*
- * bindprivs v0.02
- * (c) copyright 1999 by wojtek kaniewski <wojtekka@irc.pl>
+ * bindprivs v0.02b
+ * (c) copyright 1999, 2001 by wojtek kaniewski <wojtekka@irc.pl>
  */
 
 #ifndef __BINDPRIVS_H
@@ -16,10 +16,13 @@
 #if LINUX_VERSION_CODE < 0x020100
 #  define KERNEL_DESC "2.0"
 #  include <asm/segment.h>
+#  define lock_kernel() do { } while(0)
+#  define unlock_kernel() do { } while(0)
 #  define copy_to_user(t,f,n) (memcpy_tofs(t,f,n), 0)
 #  define copy_from_user(t,f,n) (memcpy_fromfs((t),(f),(n)), 0)
 #else
 #  define KERNEL_DESC "2.2"
+#  include <linux/smp_lock.h>
 #  include <asm/uaccess.h>
 #  include <asm/io.h>
 #endif
