@@ -1,5 +1,5 @@
 
-    bindprivs 0.5
+    bindprivs 0.6-beta1
     (c) 1998-2002 by wojtek kaniewski
     licensed under terms of GPL
     
@@ -14,7 +14,11 @@ rmmod issue:
     unusually long time the module is still used, try to look for some
     network-related processes, strace(1) them and check which ones are
     stuck on some socketcall like accept(), connect(), send() or recv().
-    then kill them.
+    then kill them. the other way is to look for network-related kernel
+    functions in ,,ps -o wchan -o cmd ax''.
+
+    if you have a ppp session running, send any packet through that link
+    after ,,bpset -u'' to release the module.
 
 compilation:
     if you get lots of errors about conflicting types, add ,,#define
@@ -32,6 +36,12 @@ betatesters:
     - SoboL <sobol@sobol.org>.
 
 changelog:
+    - 0.6-beta1 (2002-11-21)
+	+ serious bug in rule matching found by Lam has been fixed
+	  (IPv6 addresses were matched against IPv4 rules and vice
+	  versa, so it lead to false results),
+	+ gcc 3.x warnings fixed,
+        + documentation fixed.
     - 0.5 (2002-05-29)
         + bugfix release, now compiles with grsecurity thanks to Borys
 	  Pogore³o <boryspo@leszno.edu.pl>.
@@ -46,4 +56,13 @@ changelog:
 	  all future socket operations.
 	+ some framework for forcing the address. disabled by default.
 	+ updated docs.
+    - 0.3 (2000-10-05)
+ 	+ got rid of kernel 2.0 support (not really needed).
+	+ rules configuration from userland.
+    - 0.2 (1999-11-18)
+	+ cosmetics (mainly thanks and greets).
+	+ fixed `any' address (didn't work).
+	+ kernel 2.0 support (thanks to fahren).
+    - 0.1 (1999-11-17)
+	+ first public release.
 

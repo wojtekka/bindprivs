@@ -2,7 +2,7 @@
 .\" (c) copyright 1999-2002 by wojtek kaniewski <wojtekka@dev.null.pl>
 .\" $Id$
 .\"
-.TH BINDPRIVS.CONF 5 "May 8, 2002"
+.TH BINDPRIVS.CONF 5 "Nov 21, 2002"
 .SH NAME
 bindprivs.conf \- bind(2) access rules file
 .SH DESCRIPTION
@@ -36,10 +36,16 @@ has the contrary meaning.
 .SH ADDRESSES
 Both IPv4 and IPv6 addresses are supported. If followed by a slash (``/'')
 you can specify the netmask or CIDR range.
+.BR any
+matches any IPv4 address (not IPv4 or IPv6!) and
+.BR any6
+matches any IPv6 address.
 .SH "USERS AND GROUPS"
 Users or groups are separated by whitespace characters. The limit is
 hardcoded to 16 entries. Changing this limit just to add more users is
 deprecated -- create a group instead.
+.BR any
+matches any user or group.
 .SH "SAMPLE CONFIGURATION FILE"
 .nf
 # let's allow ,,root'' and ,,jack'' using 10.0.2.5
@@ -49,9 +55,6 @@ deny 10.0.2.5 all
 # only the group ,,irc'' can use our IPv6 class
 allowgroup 3ffe:1281:102:ffff::/48 irc
 deny 3ffe:1281:102:ffff::/48 all
-
-# reject all network connections from group ,,nonetwork''
-deny all all
 .fi
 .SH "SEE ALSO"
 .BR bind "(2), " bpset "(8)"

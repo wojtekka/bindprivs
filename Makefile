@@ -1,11 +1,11 @@
 # $Id$
 
-VERSION = 0.5
+VERSION = 0.6-beta1
 CC = gcc
 CFLAGS = -O3 -Wall -fomit-frame-pointer
 MODULEDIR = /lib/modules/`uname -r`/misc
 SBINDIR = /usr/local/sbin
-MANDIR = /usr/local/man
+MANDIR = /usr/local/share/man
 DOCSDIR = /usr/local/share/doc/bindprivs
 LINUX = /usr/src/linux
 

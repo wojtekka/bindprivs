@@ -30,7 +30,7 @@
 #endif
 
 /* what do you know... the version */
-#define VERSION "0.5"
+#define VERSION "0.6-beta1"
 
 /* default rules filename for bpset */
 #define DEFAULT_FILENAME "/etc/bindprivs.conf"
@@ -74,4 +74,4 @@ struct bindpriv_entry {
 #define bp_mask6 mask_u.mask_u_6
 };
 
-#endif __BINDPRIVS_H
+#endif /* __BINDPRIVS_H */

@@ -180,9 +180,9 @@ static int bind_permitted(struct sockaddr *sa, int sa_len)
 
 	/* iterate. */
 	while (count--) {
-		if (e->bp_family == AF_INET && ipv4_match(((struct sockaddr_in*) sa)->sin_addr, e->bp_addr, e->bp_mask))
+		if (e->bp_family == AF_INET && sa->sa_family == AF_INET && ipv4_match(((struct sockaddr_in*) sa)->sin_addr, e->bp_addr, e->bp_mask))
 			goto check_user;
-		if (e->bp_family == AF_INET6 && ipv6_match(((struct sockaddr_in6*) sa)->sin6_addr, e->bp_addr6, e->bp_mask6))
+		if (e->bp_family == AF_INET6 && sa->sa_family == AF_INET6 && ipv6_match(((struct sockaddr_in6*) sa)->sin6_addr, e->bp_addr6, e->bp_mask6))
 			goto check_user;
 
 		e++;
@@ -479,18 +479,17 @@ void cleanup_module()
 	}
 }
 
-const static char spell[] = "
-
-	wlaz³ kotek na p³otek
-				i mruga,
-	³adna to piosenka
-				nie d³uga,
-	nie d³uga, nie krótka
-				lecz w sam raz,
-	za¶piewaj koteczku
-				jeszcze raz.
-
-";
+const static char spell[] = "\n"
+"\n"
+"\twlaz³ kotek na p³otek\n"
+"\t\t\t\ti mruga,\n"
+"\t³adna to piosenka\n"
+"\t\t\t\tnie d³uga,\n"
+"\tnie d³uga, nie krótka\n"
+"\t\t\t\tlecz w sam raz,\n"
+"\tza¶piewaj koteczku\n"
+"\t\t\t\tjeszcze raz.\n"
+"\n";
 
 #ifdef MODULE_LICENSE
 MODULE_LICENSE("GPL");

@@ -434,19 +434,19 @@ int set_rules(char *filename)
 
 void usage(char *name)
 {
-	printf("\
-Usage: %s [OPTION]...
-Manage bind(2) access rules.
-
-  -s, --set[=FILE]   Read and set new rules (see bindprivs(5) for details)
-  -f, --flush        Flush rules
-  -l, --list         List rules
-  
-  -h, --help         Give this help list
-  -V, --version      Print program version
-  
-The default filename is " DEFAULT_FILENAME ".
-", name);
+	printf(
+"Usage: %s [OPTION]...\n"
+"Manage bind(2) access rules.\n"
+"\n"
+"  -s, --set[=FILE]   Read and set new rules (see bindprivs.conf(5) for details)\n"
+"  -f, --flush        Flush rules\n"
+"  -l, --list         List rules\n"
+"  -u, --unload       Prepare module for removing from memory\n"
+"\n"
+"  -h, --help         Give this help list\n"
+"  -V, --version      Print program version\n"
+"\n" 
+"The default filename is " DEFAULT_FILENAME ".\n", name);
 }
 
 struct option longopts[] = {
