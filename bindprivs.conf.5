@@ -1,0 +1,20 @@
+.\"
+.\" (c) copyright 1999-2001 by wojtek kaniewski <wojtekka@dev.null.pl>
+.\" $Id$
+.\"
+.TH BINDPRIVS.CONF 5 "Apr 23, 2001"
+.SH NAME
+bindprivs.conf \- bind(2) access rules file
+.SH DESCRIPTION
+To be here soon.
+.SH "CONFIG FILE FORMAT"
+Blah, blah...
+.SH "SAMPLE CONFIGURATION FILE"
+.nf
+allow 10.0.2.5 root jack
+deny 10.0.2.5 all
+allowgroup 3ffe:1281:102:ffff::/48 ircers
+deny 3ffe:1281:102:ffff::/48 all
+.fi
+.SH "SEE ALSO"
+.BR bind "(2), " bpset "(8)"

@@ -1,0 +1,35 @@
+.\"
+.\" (c) copyright 1999-2001 by wojtek kaniewski <wojtekka@dev.null.pl>
+.\" $Id$
+.\"
+.TH BPSET 8 "Apr 23, 2001"
+.SH NAME
+bpset \- manage bind(2) access rules
+.SH SYNOPSIS
+.B bpset
+[\-sl] [\-\-set] [\-\-list] [\-\-help] [\-\-version] [filename]
+.SH DESCRIPTION
+.B bpset
+allows you to manage 
+.BR bind(2)
+access rules uses by
+.B bindprivs
+kernel module.
+.SH OPTIONS
+.TP
+.B "\-s, \-\-set [filename]"
+Load rules from specified file. If filename is ommited, the default
+/etc/bindprivs.conf file is loaded.
+.TP
+.B "\-l, \-\-list"
+List rules.
+.TP
+.B "\-h, \-\-help"
+Print a usage message and exit.
+.TP
+.B "\-V, \-\-version"
+Print program version and exit.
+.SH AUTHOR
+Wojtek Kaniewski (wojtekka@dev.null.pl)
+.SH "SEE ALSO"
+.BR bind "(2), " bindprivs.conf "(5)"
