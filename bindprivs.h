@@ -1,11 +1,10 @@
 /*
  * bindprivs kernel module
- * (c) 1998-2001 wojtek kaniewski <wojtekka@dev.null.pl>
+ * (c) 1998-2002 wojtek kaniewski <wojtekka@dev.null.pl>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,15 +30,16 @@
 #endif
 
 /* what do you know... the version */
-#define VERSION "0.3"
+#define VERSION "0.4-beta1"
 
 /* default rules filename for bpset */
 #define DEFAULT_FILENAME "/etc/bindprivs.conf"
 
 /* optnames for setsockopt */
 #define IP_BINDPRIVS_BASE 0xf400
-#define IP_BINDPRIVS_GET IP_BINDPRIVS_BASE
-#define IP_BINDPRIVS_SET IP_BINDPRIVS_GET
+#define IP_BINDPRIVS_GET (IP_BINDPRIVS_BASE+0)
+#define IP_BINDPRIVS_SET (IP_BINDPRIVS_BASE+0)
+#define IP_BINDPRIVS_UNLOAD (IP_BINDPRIVS_BASE+1)
 
 /* maximum numbers of uid's/gid's in one rule */
 #define BP_MAX_UID 16
@@ -49,7 +49,9 @@ enum bindpriv_action {
 	BP_ALLOW_UID = 0,
 	BP_ALLOW_GID,
 	BP_DENY_UID,
-	BP_DENY_GID
+	BP_DENY_GID,
+	BP_FORCE_UID,
+	BP_FORCE_GID,
 };
 
 /* the structure for single entry. we're playing with an array of these. */

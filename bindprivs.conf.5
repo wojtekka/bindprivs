@@ -1,21 +1,57 @@
 .\"
-.\" (c) copyright 1999-2001 by wojtek kaniewski <wojtekka@dev.null.pl>
+.\" (c) copyright 1999-2002 by wojtek kaniewski <wojtekka@dev.null.pl>
 .\" $Id$
 .\"
-.TH BINDPRIVS.CONF 5 "Apr 23, 2001"
+.TH BINDPRIVS.CONF 5 "May 8, 2002"
 .SH NAME
 bindprivs.conf \- bind(2) access rules file
 .SH DESCRIPTION
-To be here soon.
-.SH "CONFIG FILE FORMAT"
+The
+.I bindprivs.conf
+file contains access rules for
+.BR bindprivs
+kernel module. It specifies which users can 
+.BR bind "(2)"
+to which addresses.
+.SH "FILE FORMAT"
 File format is the same as for previous versions of
 .BR bindprivs "."
+Every line consists of an action, address range and list of users or groups
+that should match this rule. Empty lines and lines starting with a hash
+mark (``#'') are ignored.
+.SH ACTIONS
+The action field describes what should be the result of 
+.BR bind "(2)"
+syscall if the address and users or groups match.
+.BR allow
+tells the module to allow given users binding to specified addresses. This
+is the default rule. When the module can't find any matching rule, the
+syscall succeeds.
+.BR deny
+denies access to specified addresses. When
+.BR allowgroup
+is used, groups listed in the rule are allowed to bind to given addresses.
+.BR denygroup
+has the contrary meaning.
+.SH ADDRESSES
+Both IPv4 and IPv6 addresses are supported. If followed by a slash (``/'')
+you can specify the netmask or CIDR range.
+.SH "USERS AND GROUPS"
+Users or groups are separated by whitespace characters. The limit is
+hardcoded to 16 entries. Changing this limit just to add more users is
+deprecated -- create a group instead.
 .SH "SAMPLE CONFIGURATION FILE"
 .nf
+# let's allow ,,root'' and ,,jack'' using 10.0.2.5
 allow 10.0.2.5 root jack
 deny 10.0.2.5 all
-allowgroup 3ffe:1281:102:ffff::/48 ircers
+
+# only the group ,,irc'' can use our IPv6 class
+allowgroup 3ffe:1281:102:ffff::/48 irc
 deny 3ffe:1281:102:ffff::/48 all
+
+# reject all network connections from group ,,nonetwork''
+deny all all
 .fi
 .SH "SEE ALSO"
 .BR bind "(2), " bpset "(8)"

@@ -1,8 +1,39 @@
-i'll put something here. soon.
 
+    bindprivs 0.4-beta1
+    (c) 1998-2002 by wojtek kaniewski
+    licensed under terms of GPL
+    
+intro:
+    this little silly kernel module can be used to restrict virtual host
+    to some particular users. read bindprivs.conf(5) and bpset(8) for
+    more details.
 
+rmmod issue:
+    before removing the module, you have to use ,,bpset -u'', wait until
+    it is unused (see lsmod's result) and then use ,,rmmod''. if after
+    unusually long time the module is still used, try to look for some
+    network-related processes, strace(1) them and check which ones are
+    stuck on some socketcall like accept(), connect(), send() or recv().
+    then kill them.
 
+contact:
+    DON'T contact me if you haven't read these docs or your system is
+    broken. if you don't know how to deal with this package, you probably
+    shouldn't be using it, or else you could get hurt. if you've found
+    some mistake, some bug or some strange behaviour, feel free to write.
 
 betatesters:
-- Kuba 'Kooba' Jermak <kooba@ondraszek.net>,
-- Lam <lam@lac.pl>.
+    - Kuba 'Kooba' Jermak <kooba@ondraszek.net>,
+    - Lam <lam@lac.pl>,
+    - SoboL <sobol@sobol.org>.
+
+changelog:
+    - 0.4beta1
+	+ kernel tree 2.4 is now supported as well as 2.2.
+	+ changed behaviour to check the address before connect(), not while
+	  bind()ing. it makes possible to deny even the default address, which
+	  is 0.0.0.0/32.
+	+ before unloading the module, you should run ,,bpset -u'' to release
+	  all future socket operations.
+	+ some framework for forcing the address. disabled by default.
+

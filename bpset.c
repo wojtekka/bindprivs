@@ -3,9 +3,8 @@
  * (c) 1998-2001 wojtek kaniewski <wojtekka@dev.null.pl>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -30,6 +29,17 @@
 #include <ctype.h>
 #include <getopt.h>
 #include "bindprivs.h"
+
+#define ERROR_NOTICE "Probably you don't have rights or bindprivs module isn't loaded.\n"
+
+char *action_string[] = {
+	"allow",
+	"allowgroup",
+	"deny",
+	"denygroup",
+	"force",
+	"forcegroup"
+};
 
 char *uid_to_name(uid_t uid)
 {
@@ -145,6 +155,7 @@ int list_rules()
 	
 	if (getsockopt(0, IPPROTO_IP, IP_BINDPRIVS_GET, NULL, &count)) {
 		perror("getsockopt");
+		fprintf(stderr, ERROR_NOTICE);
 		return 1;
 	}
 
@@ -156,15 +167,13 @@ int list_rules()
 	
 	if (getsockopt(0, IPPROTO_IP, IP_BINDPRIVS_GET, e, &len)) {
 		perror("getsockopt");
+		fprintf(stderr, ERROR_NOTICE);
 		return 1;
 	}
 	
 	for (i = 0; i < count; i++) {
-		printf("%s%s %s",
-			(e[i].bp_action == BP_ALLOW_UID ||
-			e[i].bp_action == BP_ALLOW_GID) ? "allow" : "deny",
-			(e[i].bp_action == BP_ALLOW_GID ||
-			e[i].bp_action == BP_DENY_GID) ? "group" : "",
+		printf("%s %s",
+			action_string[e[i].bp_action],
 			addr_to_name(&e[i]));
 		if (e[i].bp_uid_count) {
 			for (j = 0; j < e[i].bp_uid_count; j++) {
@@ -179,6 +188,28 @@ int list_rules()
 	}
 
 	return 0;
+}
+
+int flush_rules()
+{
+	if (setsockopt(0, IPPROTO_IP, IP_BINDPRIVS_SET, NULL, 0)) {
+		perror("setsockopt");
+		fprintf(stderr, ERROR_NOTICE);
+		return 1;
+	}
+
+	return 0;	
+}
+
+int unload_module()
+{
+	if (setsockopt(0, IPPROTO_IP, IP_BINDPRIVS_UNLOAD, NULL, 0)) {
+		perror("setsockopt");
+		fprintf(stderr, ERROR_NOTICE);
+		return 1;
+	}
+
+	return 0;	
 }
 
 int set_rules(char *filename)
@@ -222,10 +253,14 @@ int set_rules(char *filename)
 					e.bp_action = BP_ALLOW_UID;
 				else if (!strcasecmp(t, "deny"))
 					e.bp_action = BP_DENY_UID;
+				else if (!strcasecmp(t, "force"))
+					e.bp_action = BP_FORCE_UID;
 				else if (!strncasecmp(t, "allowgroup", 10))
 					e.bp_action = BP_ALLOW_GID;
 				else if (!strncasecmp(t, "denygroup", 9))
 					e.bp_action = BP_DENY_GID;
+				else if (!strncasecmp(t, "forcegroup", 10))
+					e.bp_action = BP_FORCE_GID;
 				else {
 					fprintf(stderr, "%s: line %d: unknown rule action\n", filename, line);
 					fclose(f);
@@ -387,6 +422,7 @@ int set_rules(char *filename)
 	
 	if (setsockopt(0, IPPROTO_IP, IP_BINDPRIVS_SET, entries, count * sizeof(struct bindpriv_entry))) {
 		perror("setsockopt");
+		fprintf(stderr, ERROR_NOTICE);
 		free(entries);
 		return 1;
 	}
@@ -403,6 +439,7 @@ Usage: %s [OPTION]...
 Manage bind(2) access rules.
 
   -s, --set[=FILE]   Read and set new rules (see bindprivs(5) for details)
+  -f, --flush        Flush rules
   -l, --list         List rules
   
   -h, --help         Give this help list
@@ -414,7 +451,9 @@ The default filename is " DEFAULT_FILENAME ".
 
 struct option longopts[] = {
 	{ "set", 2, NULL, 's' },
+	{ "flush", 0, NULL, 'f' },
 	{ "list", 0, NULL, 'l' },
+	{ "unload", 0, NULL, 'u' },
 	{ "help", 0, NULL, 'h' },
 	{ "version", 0, NULL, 'V' },
 	{ NULL, 0, 0, 0 }
@@ -424,14 +463,18 @@ int main(int argc, char **argv)
 {
 	int ch;
 	
-	while ((ch = getopt_long(argc, argv, "s::lhV", longopts, NULL)) != -1) {
+	while ((ch = getopt_long(argc, argv, "s::fluhV", longopts, NULL)) != -1) {
 		switch (ch) {
 			case 's':
 				if (!optarg && optind < argc && argv[optind][0] != '-')
 					optarg = argv[optind];
 				return !set_rules((optarg) ? optarg : DEFAULT_FILENAME);
+			case 'f':
+				return !flush_rules();
 			case 'l':
 				return !list_rules();
+			case 'u':
+				return !unload_module();
 			case 'h':
 				usage(argv[0]);
 				return 1;
@@ -443,7 +486,7 @@ int main(int argc, char **argv)
 		}
 	}
 	
-	fprintf(stderr, "%s: no parameters specified\n", argv[0]);
+	fprintf(stderr, "%s: no parameters specified. Try `%s --help'.\n", argv[0], argv[0]);
 	return 1;
 }
 

@@ -1,25 +1,32 @@
 .\"
-.\" (c) copyright 1999-2001 by wojtek kaniewski <wojtekka@dev.null.pl>
+.\" (c) copyright 1999-2002 by wojtek kaniewski <wojtekka@dev.null.pl>
 .\" $Id$
 .\"
-.TH BPSET 8 "Apr 23, 2001"
+.TH BPSET 8 "May 8, 2002"
 .SH NAME
-bpset \- manage bind(2) access rules
+bpset \- manage bindprivs rules
 .SH SYNOPSIS
 .B bpset
-[\-sl] [\-\-set] [\-\-list] [\-\-help] [\-\-version] [filename]
+[\-sflu] [\-\-set] [\-\-flush] [\-\-list] [\-\-unload] [\-\-help] [\-\-version] [filename]
 .SH DESCRIPTION
 .B bpset
-allows you to manage 
-.BR bind(2)
-access rules uses by
+allows you to manage access rules used by
 .B bindprivs
-kernel module.
+kernel module and the module itself.
 .SH OPTIONS
 .TP
 .B "\-s, \-\-set [filename]"
 Load rules from specified file. If filename is ommited, the default
 /etc/bindprivs.conf file is loaded.
+.TP
+.B "\-f, \-\-flush"
+Flush rules.
+.TP
+.B "\-u, \-\-unload"
+Prepare the module for 
+.BR rmmod(8) ". "
+You should wait until the module is unused, before actually removing it
+from the memory.
 .TP
 .B "\-l, \-\-list"
 List rules.
@@ -32,4 +39,4 @@ Print program version and exit.
 .SH AUTHOR
 Wojtek Kaniewski (wojtekka@dev.null.pl)
 .SH "SEE ALSO"
-.BR bind "(2), " bindprivs.conf "(5)"
+.BR bind "(2), " bindprivs.conf "(5), " rmmod "(8)"
