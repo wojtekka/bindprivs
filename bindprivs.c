@@ -21,16 +21,17 @@
 #define __KERNEL__
 #define MODULE
 
-#include <linux/kernel.h>
-#include <linux/module.h>
+#include <linux/config.h>
 #include <linux/types.h>
 #if CONFIG_MODVERSIONS
+#define MODVERSIONS
 #include <linux/modversions.h>
 #endif
+#include <linux/sched.h>
+#include <linux/module.h>
 #include <linux/socket.h>
 #include <linux/net.h>
 #include <linux/errno.h>
-#include <linux/sched.h>
 #include <linux/in.h>
 #include <linux/inet.h>
 #include <linux/capability.h>

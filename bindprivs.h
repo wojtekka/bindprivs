@@ -30,7 +30,7 @@
 #endif
 
 /* what do you know... the version */
-#define VERSION "0.4"
+#define VERSION "0.5"
 
 /* default rules filename for bpset */
 #define DEFAULT_FILENAME "/etc/bindprivs.conf"
