@@ -1,5 +1,5 @@
 /*
- * bindprivs v0.01
+ * bindprivs v0.02
  * (c) copyright 1999 by wojtek kaniewski <wojtekka@irc.pl>
  */
 
@@ -9,12 +9,13 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/types.h>
-#include <linux/string.h>
+//#include <linux/string.h>
 #include <linux/socket.h>
 #include <linux/net.h>
 #include <linux/errno.h>
+#include <linux/sched.h>
+#include <linux/in.h>
 #include <asm/unistd.h>
-#include <asm/uaccess.h>
 #include "bindprivs.h"
 
 extern void *sys_call_table[];
@@ -81,7 +82,7 @@ int new_socketcall(int call, unsigned long *args)
 
 int init_module()
 {
-  printk("bindprivs loaded, %d entries\n", ENTRIES);
+  printk("bindprivs for " KERNEL_DESC" loaded, %d entries\n", ENTRIES);
   old_socketcall = sys_call_table[__NR_socketcall];
   sys_call_table[__NR_socketcall] = new_socketcall;
   return 0;

@@ -1,11 +1,11 @@
 /* 
- * bindprivs v0.01 -- instrukcja obs³ugi
+ * bindprivs v0.02 -- instrukcja obs³ugi
  * (c) copyright 1999 by wojtek kaniewski <wojtekka@irc.pl>
  */
 
-jest to prosty modulik dla kerneli 2.2.x, który pozwala ograniczaæ dostêp do
-danych interfejsów (i aliasów IP) poszczególnym u¿ytkownikom. jego dzia³anie
-polega na przejêciu funkcji systemowej bind().
+jest to prosty modulik dla kerneli rodzin 2.0 i 2.2, który pozwala ograniczaæ
+dostêp do danych interfejsów (i aliasów IP) poszczególnym u¿ytkownikom. jego
+dzia³anie polega na przejêciu funkcji systemowej bind(2).
 
 niestety ze wzglêdu na prostotê modu³u, wszystkie ustawienia s± wkompilowane
 na sta³e i nie mo¿na ich zmieniaæ podczas dzia³ania. ustawienia s± zapisane w
@@ -62,15 +62,27 @@ load'.
 
 gdy chcemy zmieniæ parametry modu³u, po edycji pliku `bindprivs.conf' mo¿na
 wywo³aæ polecenie `make rebuild', które po kompilacji modu³u, usunie z pamiêci
-star± wersjê i za³aduje now±.
+star± wersjê i za³aduje now±. tak, prawie jak Windows.
+
+// UWAGA! w przypadku kerneli rodziny 2.0, podczas kompilacji mog± siê pojawiæ
+// ostrze¿enia o b³êdach w plikach nag³ówkowych. mo¿liwe, ¿e jest to b³±d
+// specyficzny dla konfiguracji mojej maszyny (egcs-2.91.66, glibc-2.1.1-6),
+// ale je¶li siê pojawi, mo¿na go spokojnie ignorowaæ.
+ 
+modu³ by³ testowany przeze mnie na maszynach z redhatem 6.0 i kernelami
+2.0.35, 2.2.9, 2.2.12. je¶li dzia³a³ poprawnie na systemach o innych
+parametrach, proszê o kontakt (adres e-mail na górze).
 
 je¶li kiedykolwiek uka¿e siê nowa lub poprawiona wersja programu, bêdzie siê
-ona znajdowaæ pod adresami:
+ona znajdowaæ pod adresami (fizycznie ten sam serwer):
 
   http://wojtekka.stone.pl/software/
   ftp://amba.bydg.pdi.net/pub/people/wojtekka/
 
-chcia³bym tylko jeszcze podziêkowaæ lcamtufowi, za to, ¿e jego modu³y s±
-¶wietnymi przyk³adami (szczególnie afhrm i sockpriv), kod¿akowi, za jego
-dzie³a, które sta³y siê inspiracj± do napisania `bindprivs' i Mitchowi, za
-nieumy¶lne podsuniêcie pomys³u ;)
+podziêkowania dla: lcamtufa (za afhrm, sockpriv i tekst o modu³ach, dziêki
+którym skleci³em to co¶), kod¿aka (za jego dzie³a, które sta³y siê inspiracj±
+do napisania bindprivs), Mitcha (za nieumy¶lne podsuniêcie pomys³u), fahrena
+(za sugestiê obs³ugi kerneli 2.0), maxia (za zachêcanie do walki), Pana (za
+dobre chêci) i Tygrysa (nie wiem za co, ale te¿ dziêkujê). poza tym,
+korzystaj±c z okazji, chcia³bym pozdrowiæ kana³ #plug ;).
+
