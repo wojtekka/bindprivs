@@ -1,6 +1,6 @@
 # $Id$
 
-VERSION = 0.3-beta2
+VERSION = 0.3-beta3
 CC = gcc
 CFLAGS = -O3 -Wall -fomit-frame-pointer
 MODULEDIR = /lib/modules/`uname -r`/misc

@@ -58,6 +58,9 @@ int (*old_socketcall)(int call, unsigned long *args);
 /* we have to lock, because rules might change while in bind(). */
 rwlock_t __bp_lock = RW_LOCK_UNLOCKED;
 
+/* XXX we'd like to know if some socketcalls are happening. */
+atomic_t __bp_socketcalls;
+
 /* check if IPv4 matches. */
 static inline int ipv4_match(struct in_addr x, struct in_addr addr, struct in_addr mask)
 {
@@ -159,6 +162,8 @@ int new_socketcall(int call, unsigned long *args)
 	char sockaddr[MAX_SOCK_ADDR];
 	int res;
 
+	atomic_inc(&__bp_socketcalls);	/* XXX */
+	
 	lock_kernel();
 	
 	if (call == SYS_BIND) {
@@ -307,6 +312,8 @@ call:
 	res = old_socketcall(call, args);
 exit:
 	unlock_kernel();
+
+	atomic_dec(&__bp_socketcalls);	/* XXX */
 	
 	return res;
 }
@@ -314,6 +321,8 @@ exit:
 int init_module()
 {
 	unsigned long flags;
+
+	atomic_set(&__bp_socketcalls, 0);
 	
 	save_flags(flags);
 	cli();
@@ -332,6 +341,13 @@ void cleanup_module()
 	cli();
 	sys_call_table[__NR_socketcall] = old_socketcall;
 	restore_flags(flags);
+	
+	/* XXX */
+	if (atomic_read(&__bp_socketcalls)) {
+		printk("bindprivs: %d socketcalls pending.\n", atomic_read(&__bp_socketcalls));
+		while (atomic_read(&__bp_socketcalls))
+			schedule();
+	}
 }
 
 const static char spell[] = "
