@@ -1,5 +1,5 @@
 
-    bindprivs 0.4-beta1
+    bindprivs 0.4
     (c) 1998-2002 by wojtek kaniewski
     licensed under terms of GPL
     
@@ -16,19 +16,25 @@ rmmod issue:
     stuck on some socketcall like accept(), connect(), send() or recv().
     then kill them.
 
+compilation:
+    if you get lots of errors about conflicting types, add ,,#define
+    _LOOSE_KERNEL_NAMES'' at top of bindprivs.c
+
 contact:
     DON'T contact me if you haven't read these docs or your system is
     broken. if you don't know how to deal with this package, you probably
     shouldn't be using it, or else you could get hurt. if you've found
     some mistake, some bug or some strange behaviour, feel free to write.
-
+    
 betatesters:
-    - Kuba 'Kooba' Jermak <kooba@ondraszek.net>,
+    - Kuba 'Kooba' Jermak <kooba@kooba.net>,
     - Lam <lam@lac.pl>,
     - SoboL <sobol@sobol.org>.
 
 changelog:
-    - 0.4beta1
+    - 0.4 (2002-05-25)
+        + no one complained, so moving to stable.
+    - 0.4-beta1 (2002-05-08)
 	+ kernel tree 2.4 is now supported as well as 2.2.
 	+ changed behaviour to check the address before connect(), not while
 	  bind()ing. it makes possible to deny even the default address, which
@@ -36,4 +42,5 @@ changelog:
 	+ before unloading the module, you should run ,,bpset -u'' to release
 	  all future socket operations.
 	+ some framework for forcing the address. disabled by default.
+	+ updated docs.
 
