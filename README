@@ -1,7 +1,7 @@
 
-    bindprivs 0.6-beta1
+    bindprivs 0.6-beta2
     (c) 1998-2002 by wojtek kaniewski
-    licensed under terms of GPL
+    licensed under terms of GPL v2
     
 intro:
     this little silly kernel module can be used to restrict virtual host
@@ -36,6 +36,8 @@ betatesters:
     - SoboL <sobol@sobol.org>.
 
 changelog:
+    - 0.6-beta2 (2002-11-23)
+        + cleanups,
     - 0.6-beta1 (2002-11-21)
 	+ serious bug in rule matching found by Lam has been fixed
 	  (IPv6 addresses were matched against IPv4 rules and vice

@@ -1,9 +1,9 @@
 # $Id$
 
-VERSION = 0.6-beta1
+VERSION = $(shell grep 'define VERSION' bindprivs.h | cut -d'"' -f2)
 CC = gcc
 CFLAGS = -O3 -Wall -fomit-frame-pointer
-MODULEDIR = /lib/modules/`uname -r`/misc
+MODULEDIR = /lib/modules/$(shell uname -r)/misc
 SBINDIR = /usr/local/sbin
 MANDIR = /usr/local/share/man
 DOCSDIR = /usr/local/share/doc/bindprivs
@@ -47,3 +47,7 @@ tarball:	clean
 
 clean:
 	rm -f *.o bpset *~ core bindprivs-*.tar.gz
+
+checkin:
+	cat .files | xargs ci -l -m$(VERSION) 
+
