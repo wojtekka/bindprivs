@@ -1,10 +1,10 @@
 # $Id$
 
-VERSION = 0.3-beta
+VERSION = 0.3-beta2
 CC = gcc
 CFLAGS = -O3 -Wall -fomit-frame-pointer
 MODULEDIR = /lib/modules/`uname -r`/misc
-BINDIR = /usr/local/bin
+SBINDIR = /usr/local/sbin
 MANDIR = /usr/local/man
 LINUX = /usr/src/linux
 
@@ -27,25 +27,16 @@ bindprivs.o:	bindprivs.c bindprivs.h
 	@echo "--------------------------------------------------------------------------"
 
 bpset:	bpset.c bindprivs.h
-	$(CC) bpset.c -o bpset
+	$(CC) $(CFLAGS) bpset.c -o bpset
 
 install:	bindprivs.o bpset
-	install bindprivs.o $(MODULEDIR)
-	install bpset $(BINDIR)
-	install bpset.8 $(MANDIR)/man8
-	install bindprivs.conf.5 $(MANDIR)/man5
+	install -m 644 bindprivs.o $(MODULEDIR)
+	install -m 755 bpset $(SBINDIR)
+	install -m 644 bpset.8 $(MANDIR)/man8
+	install -m 644 bindprivs.conf.5 $(MANDIR)/man5
 
 tarball:	clean
-	(cd ..; \
-	mv bindprivs bindprivs-$(VERSION); \
-	tar zcvf bindprivs-$(VERSION)/bindprivs-$(VERSION).tar.gz \
-		--exclude bindprivs-$(VERSION)/RCS \
-		--exclude bindprivs-$(VERSION)/TODO \
-		--exclude bindprivs-$(VERSION)/reload \
-		--exclude bindprivs-$(VERSION)/bindprivs.conf \
-		--exclude bindprivs-$(VERSION)/bindprivs-$(VERSION).tar.gz \
-		bindprivs-$(VERSION); \
-	mv bindprivs-$(VERSION) bindprivs)
+	./make-tarball.sh bindprivs bindprivs-$(VERSION)
 
 clean:
 	rm -f *.o bpset *~ core bindprivs-*.tar.gz

@@ -206,7 +206,7 @@ int set_rules(char *filename)
 				fclose(f);
 				return 1;
 			}
-			fprintf(stderr, "%s: line %d: warning: last line not finished with a new-line character\n", filename, line);
+			fprintf(stderr, "%s: line %d: warning: no newline at end of file\n", filename, line);
 		}
 		if (buf[0] == '#' || (buf[0] == '/' && buf[1] == '/'))
 			continue;
@@ -222,9 +222,9 @@ int set_rules(char *filename)
 					e.bp_action = BP_ALLOW_UID;
 				else if (!strcasecmp(t, "deny"))
 					e.bp_action = BP_DENY_UID;
-				else if (!strcasecmp(t, "allowgroup"))
+				else if (!strncasecmp(t, "allowgroup", 10))
 					e.bp_action = BP_ALLOW_GID;
-				else if (!strcasecmp(t, "denygroup"))
+				else if (!strncasecmp(t, "denygroup", 9))
 					e.bp_action = BP_DENY_GID;
 				else {
 					fprintf(stderr, "%s: line %d: unknown rule action\n", filename, line);
@@ -422,11 +422,13 @@ struct option longopts[] = {
 
 int main(int argc, char **argv)
 {
-	int ch, optind;
+	int ch;
 	
-	while ((ch = getopt_long(argc, argv, "s:lhV", longopts, &optind)) != -1) {
+	while ((ch = getopt_long(argc, argv, "s::lhV", longopts, NULL)) != -1) {
 		switch (ch) {
 			case 's':
+				if (!optarg && optind < argc && argv[optind][0] != '-')
+					optarg = argv[optind];
 				return !set_rules((optarg) ? optarg : DEFAULT_FILENAME);
 			case 'l':
 				return !list_rules();
@@ -444,3 +446,4 @@ int main(int argc, char **argv)
 	fprintf(stderr, "%s: no parameters specified\n", argv[0]);
 	return 1;
 }
+
