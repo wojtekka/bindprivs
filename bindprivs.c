@@ -470,6 +470,7 @@ void cleanup_module()
 {
 	release_socketcall();
 	
+#if 0
 	if (atomic_read(&__bp_socketcalls)) {
 		printk("bindprivs: %d socketcalls pending. RTFM. have a *nice* day.\n", atomic_read(&__bp_socketcalls));
 		while (atomic_read(&__bp_socketcalls)) {
@@ -477,6 +478,7 @@ void cleanup_module()
 			schedule();
 		}
 	}
+#endif
 }
 
 const static char spell[] = "\n"

@@ -1,5 +1,5 @@
 
-    bindprivs 0.6-beta2
+    bindprivs 0.6-beta3
     (c) 1998-2002 by wojtek kaniewski
     licensed under terms of GPL v2
     
@@ -36,6 +36,8 @@ betatesters:
     - SoboL <sobol@sobol.org>.
 
 changelog:
+    - 0.6-beta3 (2002-11-25)
+        + removed no longer needed cleanup_module() code,
     - 0.6-beta2 (2002-11-23)
         + cleanups,
     - 0.6-beta1 (2002-11-21)
